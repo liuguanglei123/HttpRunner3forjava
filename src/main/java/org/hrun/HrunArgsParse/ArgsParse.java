@@ -9,24 +9,20 @@ import java.util.List;
 
 @Data
 public class ArgsParse {
-    @Parameters(commandDescription  = "Run TestCase")
-    private class CommandRun{
+
+    @Parameters(commandDescription  = "Make TestCase")
+    public class CommandMake{
 
     }
 
-    @Parameters(commandDescription  = "Run TestCase")
-    private class CommandMake{
-
-    }
-
-    @Parameters(commandDescription  = "Run TestCase")
-    private class CommandScaffold{
+    @Parameters(commandDescription  = "Scaffold TestCase")
+    public class CommandScaffold{
 
     }
 
 
 
-    @Parameter(names={ "-V", "--version"},description = "show version",help=true)
+    /*@Parameter(names={ "-V", "--version"},description = "show version",help=true)
     private Boolean version;
 
     @Parameter(names="testcase_paths",description = "testcase file path", converter=ArgsParseListConverter.class)
@@ -70,6 +66,6 @@ public class ArgsParse {
 
     public List<String> getTestcase_paths(){
         return this.testcase_paths;
-    }
+    }*/
 
 }

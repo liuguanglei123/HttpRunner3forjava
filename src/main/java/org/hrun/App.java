@@ -1,6 +1,9 @@
 package org.hrun;
 
 import org.hrun.HrunArgsParse.ArgsParse;
+import org.hrun.HrunArgsParse.CommandRun;
+import org.hrun.HrunArgsParse.CommandMake;
+import org.hrun.HrunArgsParse.CommandScaffold;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +26,15 @@ public class App
     public static void main( String[] args )
     {
         ArgsParse argsParse = new ArgsParse();
+        CommandRun commandRun = new CommandRun();
+        CommandMake commandMake = new CommandMake();
+        CommandScaffold commandScaffold = new CommandScaffold();
+
         JCommander jCommander = JCommander.newBuilder()
                 .addObject(argsParse)
+                .addCommand("run", commandRun)
+                .addCommand("make", commandMake)
+                .addCommand("scaffold", commandScaffold)
                 .build();
 
         try {
@@ -35,8 +45,6 @@ public class App
             return;
         }
 
-
-
-        System.out.println( "Hello World!" );
+        System.out.println(commandRun.getTestcase_paths());
     }
 }
