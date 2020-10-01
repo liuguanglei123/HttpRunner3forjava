@@ -45,6 +45,11 @@ public class App
             return;
         }
 
+        if(args.length >= 2 && args[2].equals("run")){
+
+
+        }
+
         System.out.println(commandRun.getTestcase_paths());
     }
 }
