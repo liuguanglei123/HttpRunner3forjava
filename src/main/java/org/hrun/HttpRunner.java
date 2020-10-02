@@ -1,11 +1,18 @@
 package org.hrun;
 
+import com.google.common.base.Strings;
 import org.hrun.Component.*;
 import org.junit.Test;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import static org.hrun.Loader.load_project_meta;
 
 public class HttpRunner {
     private Config config ;
@@ -56,21 +63,19 @@ public class HttpRunner {
             __project_meta = load_project_meta(this.__config.getPath());
         }
 
+        if(Strings.isNullOrEmpty(__case_id))
+            this.__case_id = UUID.randomUUID().toString();
+
+        if(Strings.isNullOrEmpty(__log_path))
+            this.__log_path = Paths.get(this.__project_meta.getRootDir()).resolve("logs").resolve(this.__case_id + ".run.log").toAbsolutePath().toString();
+
+        // TODO:日志处理，放在1.1实现
+        // log_handler = logger.add(self.__log_path, level="DEBUG")
+
+
 
         return null;
     }
-
-
-//    def test_start(self, param: Dict = None) -> "HttpRunner":
-        """main entrance, discovered by pytest"""
-        self.__project_meta = self.__project_meta or load_project_meta(
-            self.__config.path
-        )
-        self.__case_id = self.__case_id or str(uuid.uuid4())
-        self.__log_path = self.__log_path or os.path.join(
-            self.__project_meta.RootDir, "logs", f"{self.__case_id}.run.log"
-        )
-        log_handler = logger.add(self.__log_path, level="DEBUG")
 
         # parse config name
         config_variables = self.__config.variables
