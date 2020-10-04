@@ -14,4 +14,13 @@ public class Variables {
     public Variables update(Variables variables){
         return this;
     }
+
+    public Variables update(Map param){
+        return this;
+    }
+
+    public Variables update(VariablesMapping variablesMapping){
+        return this;
+    }
+
 }
