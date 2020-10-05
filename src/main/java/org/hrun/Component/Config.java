@@ -6,7 +6,7 @@ import java.util.Map;
 public class Config {
 
     private String __name;
-    private Variables __variables
+    private Variables __variables;
     private String __base_url;
     private Boolean __verify;
     private Export __export;

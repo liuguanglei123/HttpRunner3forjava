@@ -3,6 +3,7 @@ package org.hrun;
 import com.google.common.base.Strings;
 import lombok.Data;
 import org.hrun.Component.*;
+import org.hrun.exceptions.HrunExceptionFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,13 @@ public class HttpRunner {
     private ProjectMeta __project_meta = null;
     private String __case_id;
     private List<String> __export;
-    private List<StepData> __step_datas;
+    private List<StepData> __step_datas = new ArrayList<>();
     private HttpSession __session;
     private VariablesMapping __session_variables;
     // time
-    private Float __start_at;
-    private Float __end_at;
+    private long __start_at;
+    private long __end_at;
+    private long __duration;
     // log
     private String __log_path;
 
@@ -109,23 +111,6 @@ public class HttpRunner {
             this.__project_meta = load_project_meta(this.__config.getPath);
 
         this.__parse_config(this.__config);
-
-    }
-
-    public void __parse_config(Config config){
-        config.getVariables.update(this.__session_variables);
-        config.setVariables(Parse.parse_variables_mapping(
-                config.getVariables(),this.__project_meta.getFunctions()
-            )
-        );
-        config.setName(Parse.parse_data(config.getName(),config.getVariables(),this.__project_meta.getFunctions()));
-        config.setBase_url(Parse.parse_data(config.getBase_url(),config.getVariables(),this.__project_meta.getFunctions()));
-
-        if(this.__project_meta == null || this.__project_meta.isEmpty()){
-            this.set__project_meta(load_project_meta(this.__config.getPath()));
-        }
-
-        this.__parse_config(this.__config);
         this.__start_at = System.currentTimeMillis();
         this.__step_datas = new ArrayList<StepData>();
         if(this.__session == null){
@@ -133,36 +118,52 @@ public class HttpRunner {
         }
         VariablesMapping extracted_variables = new VariablesMapping();
 
+        for(TStep step : this.__teststeps){
+            step.setVariables(merge_variables(step.getVariables, extracted_variables));
+            step.setVariables(merge_variables(step.getVariables, this.__config.getVariables()));
 
+            step.getVariables = parse_variables_mapping(step.getVariables, this.__project_meta,getFunctions());
 
+            //TODO: USE_ALLURE:
+            Map extract_mapping = this.__run_step(step);
 
+            extracted_variables.update(extract_mapping);
+        }
+
+        this.__session_variables.update(extracted_variables);
+        this.__duration = System.currentTimeMillis() - this.__start_at;
+
+        return this;
     }
-        # run teststeps
-        for step in self.__teststeps:
-            # override variables
-            # step variables > extracted variables from previous steps
-            step.variables = merge_variables(step.variables, extracted_variables)
-            # step variables > testcase config variables
-            step.variables = merge_variables(step.variables, self.__config.variables)
 
-            # parse variables
-            step.variables = parse_variables_mapping(
-                step.variables, self.__project_meta.functions
-            )
+    public void __parse_config(Config config) {
+        config.getVariables.update(this.__session_variables);
+        config.setVariables(Parse.parse_variables_mapping(
+                config.getVariables(), this.__project_meta.getFunctions()
+                )
+        );
+        config.setName(Parse.parse_data(config.getName(), config.getVariables(), this.__project_meta.getFunctions()));
+        config.setBase_url(Parse.parse_data(config.getBase_url(), config.getVariables(), this.__project_meta.getFunctions()));
 
-            # run step
-            if USE_ALLURE:
-                with allure.step(f"step: {step.name}"):
-                    extract_mapping = self.__run_step(step)
-            else:
-                extract_mapping = self.__run_step(step)
+        if (this.__project_meta == null || this.__project_meta.isEmpty()) {
+            this.set__project_meta(load_project_meta(this.__config.getPath()));
+        }
+    }
 
-            # save extracted variables to session variables
-            extracted_variables.update(extract_mapping)
+    public Map __run_step(TStep step){
+        logger.info("run step begin: {step.name} >>>>>>");
+        StepData step_data = null;
 
-        self.__session_variables.update(extracted_variables)
-        self.__duration = time.time() - self.__start_at
-        return self
+        if(step.getRequest() != null){
+            step_data = this.__run_step_request(step);
+        }else if(step.getTestcase != null){
+            step_data = this.__run_step_testcase(step);
+        }else{
+            HrunExceptionFactory.create("E0001");
+        }
 
-
+        this.__step_datas.add(step_data);
+        logger.info("run step end: {step.name} <<<<<<\n");
+        return step_data.getExport_vars();
+    }
 }
