@@ -166,4 +166,100 @@ public class HttpRunner {
         logger.info("run step end: {step.name} <<<<<<\n");
         return step_data.getExport_vars();
     }
+
+    public StepData __run_step_request(TStep step){
+        StepData step_data = new StepData(step.getName());
+        prepare_upload_step(step,this.__project_meta.getFuntions());
+        request_dict = step.getRequest().getDict();
+        request_dict.remove("upload");
+        parsed_request_dict = parse_data(request_dict,step.getVariables(),this.__project_meta.getFunctions());
+
+        parsed_request_dict["headers"].setdefault(
+                "HRUN-Request-ID",
+                "HRUN-{self.__case_id}-{str(int(time.time() * 1000))[-6:]}"
+                );
+        step.getVariables().put("request", parsed_request_dict);
+        if(step.hasSetup_hooks()){
+            this.__call_hooks(step.getSetup_hooks(), step.getVariables(), "setup request");
+        }
+        // prepare arguments
+
+
+
+        # prepare arguments
+        method = parsed_request_dict.pop("method")
+        url_path = parsed_request_dict.pop("url")
+        url = build_url(self.__config.base_url, url_path)
+        parsed_request_dict["verify"] = self.__config.verify
+        parsed_request_dict["json"] = parsed_request_dict.pop("req_json", {})
+
+        # request
+        resp = self.__session.request(method, url, **parsed_request_dict)
+        resp_obj = ResponseObject(resp)
+        step.variables["response"] = resp_obj
+
+        # teardown hooks
+        if step.teardown_hooks:
+            self.__call_hooks(step.teardown_hooks, step.variables, "teardown request")
+
+        def log_req_resp_details():
+            err_msg = "\n{} DETAILED REQUEST & RESPONSE {}\n".format("*" * 32, "*" * 32)
+
+            # log request
+            err_msg += "====== request details ======\n"
+            err_msg += f"url: {url}\n"
+            err_msg += f"method: {method}\n"
+            headers = parsed_request_dict.pop("headers", {})
+            err_msg += f"headers: {headers}\n"
+            for k, v in parsed_request_dict.items():
+                v = utils.omit_long_data(v)
+                err_msg += f"{k}: {repr(v)}\n"
+
+            err_msg += "\n"
+
+            # log response
+            err_msg += "====== response details ======\n"
+            err_msg += f"status_code: {resp.status_code}\n"
+            err_msg += f"headers: {resp.headers}\n"
+            err_msg += f"body: {repr(resp.text)}\n"
+            logger.error(err_msg)
+
+        # extract
+        extractors = step.extract
+        extract_mapping = resp_obj.extract(extractors)
+        step_data.export_vars = extract_mapping
+
+        variables_mapping = step.variables
+        variables_mapping.update(extract_mapping)
+
+        # validate
+        validators = step.validators
+        session_success = False
+        try:
+            resp_obj.validate(
+                validators, variables_mapping, self.__project_meta.functions
+            )
+            session_success = True
+        except ValidationFailure:
+            session_success = False
+            log_req_resp_details()
+            # log testcase duration before raise ValidationFailure
+            self.__duration = time.time() - self.__start_at
+            raise
+        finally:
+            self.success = session_success
+            step_data.success = session_success
+
+            if hasattr(self.__session, "data"):
+                # httprunner.client.HttpSession, not locust.clients.HttpSession
+                # save request & response meta data
+                self.__session.data.success = session_success
+                self.__session.data.validators = resp_obj.validation_results
+
+                # save step data
+                step_data.data = self.__session.data
+
+        return step_data
+
+    }
 }

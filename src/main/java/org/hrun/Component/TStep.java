@@ -1,7 +1,11 @@
 package org.hrun.Component;
 
-public class TStep {
+import lombok.Data;
 
+import java.util.List;
+
+@Data
+public class TStep {
     private String name;
     private Request request;
     private String testcasestr;
@@ -13,12 +17,4 @@ public class TStep {
     private Export export;
     private Validators validators;
     private List<String> validate_script;
-    setup_hooks: Hooks = []
-    teardown_hooks: Hooks = []
-            # used to extract request's response field
-    extract: VariablesMapping = {}
-    # used to export session variables from referenced testcase
-    export: Export = []
-    validators: Validators = Field([], alias="validate")
-    validate_script: List[Text] = []
 }
