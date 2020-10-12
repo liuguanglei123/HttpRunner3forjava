@@ -3,13 +3,12 @@ package org.hrun;
 import com.google.common.base.Strings;
 import lombok.Data;
 import org.hrun.Component.*;
+import org.hrun.Component.Common.Config;
+import org.hrun.Component.Common.Variables;
 import org.hrun.exceptions.HrunExceptionFactory;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -183,16 +182,11 @@ public class HttpRunner {
             this.__call_hooks(step.getSetup_hooks(), step.getVariables(), "setup request");
         }
         // prepare arguments
-
-
-
-        # prepare arguments
         method = parsed_request_dict.pop("method")
         url_path = parsed_request_dict.pop("url")
         url = build_url(self.__config.base_url, url_path)
         parsed_request_dict["verify"] = self.__config.verify
         parsed_request_dict["json"] = parsed_request_dict.pop("req_json", {})
-
         # request
         resp = self.__session.request(method, url, **parsed_request_dict)
         resp_obj = ResponseObject(resp)

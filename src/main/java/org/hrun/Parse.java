@@ -1,7 +1,6 @@
 package org.hrun;
 
 import org.hrun.Component.FunctionsMapping;
-import org.hrun.Component.Variables;
 import org.hrun.Component.VariablesMapping;
 import org.hrun.exceptions.HrunExceptionFactory;
 
@@ -9,8 +8,19 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Parse {
+
+    //use $$ to escape $ notation
+    static public Pattern dolloar_regex_compile = Pattern.compile("\\$\\$");
+
+    //variable notation, e.g. ${var} or $var
+    static public Pattern variable_regex_compile = Pattern.compile("\\$\\{(\\w+)\\}|\\$(\\w+)");
+
+    //function notation, e.g. ${func1($var_1, $var_3)}
+    static public Pattern function_regex_compile = Pattern.compile("\\$\\{(\\w+)\\(([\\$\\w\\.\\-/\\s=,]*)\\)\\}");
+
 
     public VariablesMapping parse_variables_mapping(VariablesMapping variables_mapping){
         return parse_variables_mapping(variables_mapping,null);

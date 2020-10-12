@@ -1,4 +1,7 @@
-package org.hrun.Component;
+package org.hrun.Component.Common;
+
+import org.hrun.Component.Export;
+import org.hrun.Component.TConfig;
 
 import java.util.List;
 import java.util.Map;
