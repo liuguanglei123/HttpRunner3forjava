@@ -1,5 +1,6 @@
 package org.hrun.Component.LazyContent;
 
+import lombok.Data;
 import org.hrun.Component.Common.Variables;
 
 import java.io.Serializable;
@@ -7,6 +8,7 @@ import java.util.regex.Matcher;
 
 import static org.hrun.Parse.*;
 
+@Data
 public class LazyContent<T> implements Cloneable, Serializable {
     //用来记录原始值
     public T raw_value;
