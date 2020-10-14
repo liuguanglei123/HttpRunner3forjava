@@ -41,9 +41,6 @@ public class HttpRunner {
     private String __log_path;
 
 
-
-
-
     public void __init_tests__(){
         //TODO:
         this.__config = this.config.perform();

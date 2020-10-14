@@ -16,7 +16,7 @@ public class Config {
     private String __path;
     private int __weight;
 
-    public void __init__(String name) {
+    public Config(String name) {
         this.__name = name;
         this.__variables = new Variables();
         this.__base_url = "";
