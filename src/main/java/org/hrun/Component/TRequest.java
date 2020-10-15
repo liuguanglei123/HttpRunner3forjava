@@ -1,22 +1,25 @@
 package org.hrun.Component;
 
+import lombok.Data;
+import org.hrun.Component.Common.*;
+import org.hrun.Enum.MethodEnum;
+
+@Data
 public class TRequest {
+    private MethodEnum method;
+    private String url;
+    private Params params;
+    private Headers headers;
+    private ReqJson req_json;
+    private ReqData req_data;
+    private Cookies cookies;
+    private Float timeout;
+    private boolean allow_redirects;
+    private boolean verify;
+    private Object upload; //TODO：上传文件
 
-
-
-    """requests.Request model"""
-
-    method: MethodEnum
-    url: Url
-    params: Dict[Text, Text] = {}
-    headers: Headers = {}
-    req_json: Union[Dict, List, Text] = Field(None, alias="json")
-    data: Union[Text, Dict[Text, Any]] = None
-    cookies: Cookies = {}
-    timeout: float = 120
-    allow_redirects: bool = True
-    verify: Verify = False
-    upload: Dict = {}  # used for upload files
-
+    public Params getParams(){
+        return this.params;
+    }
 
 }

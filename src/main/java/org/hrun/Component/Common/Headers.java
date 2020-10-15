@@ -3,19 +3,20 @@ package org.hrun.Component.Common;
 import lombok.Data;
 import org.hrun.Component.LazyContent.LazyContent;
 import org.hrun.Component.LazyContent.LazyString;
-import org.hrun.Component.Parseable;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
-public class Params implements Serializable, Parseable {
+public class Headers implements Serializable {
     private HashMap<String, LazyContent> content = new HashMap<String,LazyContent>();
 
-    public Params(Map raw_params) {
-        for (Map.Entry<String, Object> entry : ((HashMap<String, Object>) raw_params).entrySet()) {
+    public Headers(Map raw_headers) {
+        for (Map.Entry<String, Object> entry : ((HashMap<String, Object>) raw_headers).entrySet()) {
             if (entry.getValue() instanceof String )
                 content.put(entry.getKey(), new LazyString(String.valueOf(entry.getValue())));
             else
@@ -33,7 +34,7 @@ public class Params implements Serializable, Parseable {
         }
     }
 
-    public Parseable to_value(Variables variables_mapping) {
+    public Headers to_value(Variables variables_mapping) {
         if(this.content == null || this.content.size() == 0)
             return this;
 
@@ -41,7 +42,6 @@ public class Params implements Serializable, Parseable {
             if(value instanceof LazyString)
                 ((LazyString)value).to_value(variables_mapping);
         }
-
         return this;
     }
 
@@ -49,6 +49,17 @@ public class Params implements Serializable, Parseable {
         return (content == null || content.size() == 0);
     }
 
-    public void update(Params params){
+    public Map<String,String> toMap(){
+        Map<String,String> headerMap = this.content.entrySet().stream().collect(
+                Collectors.toMap(
+                        entry -> entry.getKey(), entry -> String.valueOf(Optional.ofNullable(entry.getValue().getEvalValue()).orElse(""))
+                )
+        );
+
+        return headerMap;
+    }
+
+    public void update(Headers headers){
+        //TODO:
     }
 }
