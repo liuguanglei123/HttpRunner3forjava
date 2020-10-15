@@ -19,7 +19,7 @@ public class RunRequest {
     }
 
     public RequestWithOptionalArgs get(String url){
-        __step_context.SetRequest(new TRequest("TODO:"));
+        __step_context.setRequest(new TRequest("TODO:"));
         return new RequestWithOptionalArgs(__step_context);
     }
 
