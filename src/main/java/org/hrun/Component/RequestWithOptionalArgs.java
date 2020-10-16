@@ -2,7 +2,7 @@ package org.hrun.Component;
 
 import org.hrun.Component.Common.*;
 
-public class RequestWithOptionalArgs implements NeedReNameItf {
+public class RequestWithOptionalArgs implements Performable {
     private TStep __step_context;
 
     public RequestWithOptionalArgs(TStep step_context){
@@ -67,7 +67,8 @@ public class RequestWithOptionalArgs implements NeedReNameItf {
         return new StepRequestValidation(this.__step_context);
     }
 
-    public TStep perform(boolean allow_redirects){
+    @Override
+    public TStep perform(){
         return this.__step_context;
     }
 }

@@ -1,5 +1,5 @@
 package org.hrun.Component;
 
-public interface NeedReNameItf {
+public interface Performable {
     TStep perform();
 }

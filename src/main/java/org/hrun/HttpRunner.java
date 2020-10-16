@@ -59,7 +59,7 @@ public class HttpRunner {
 
 
     public HttpRunner test_start(Map param){
-        /* 测试用例执行的主要入口，在httprunner原版中，是依赖pytest自动发现机制去调用的，不过不是很理解原版中的param参数是如何传递的
+        /* 测试用例执行的主要入口，在httprunner原版中，是依赖pytest自动发现机制去调用的，不过不是很理解原版中的param参数是作何用，又是如何传递的
         TODO：了解一下pytest中test方法的参数传递
          */
         this.__init_tests__();

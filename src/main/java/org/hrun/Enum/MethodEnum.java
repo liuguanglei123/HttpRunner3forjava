@@ -14,9 +14,9 @@ public enum MethodEnum {
         this.index = i;
     }
 
-    public static String getMethod(int index) {
+    public static String getMethod(String method) {
         for (MethodEnum c : MethodEnum.values()) {
-            if (c.getIndex() == index) {
+            if (c.getMethod().equals(method)) {
                 return c.method;
             }
         }
@@ -27,5 +27,16 @@ public enum MethodEnum {
         return this.index;
     }
 
+    public String getMethod(){
+        return this.method;
+    }
 
+    public static MethodEnum getMethodEnum(String method){
+        for (MethodEnum c : MethodEnum.values()) {
+            if (c.getMethod().equals(method)) {
+                return c;
+            }
+        }
+        return null;
+    }
 }

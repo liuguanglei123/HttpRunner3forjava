@@ -1,6 +1,6 @@
 package org.hrun.Component;
 
-public class StepRequestValidation implements NeedReNameItf{
+public class StepRequestValidation implements Performable {
     private TStep __step_context;
 
     public StepRequestValidation(TStep step_context){

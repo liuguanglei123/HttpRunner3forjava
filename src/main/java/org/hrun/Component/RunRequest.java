@@ -1,5 +1,7 @@
 package org.hrun.Component;
 
+import org.hrun.Enum.MethodEnum;
+
 import java.util.Map;
 
 public class RunRequest {
@@ -19,9 +21,16 @@ public class RunRequest {
     }
 
     public RequestWithOptionalArgs get(String url){
-        __step_context.setRequest(new TRequest("TODO:"));
+        __step_context.setRequest(new TRequest("GET",url));
         return new RequestWithOptionalArgs(__step_context);
     }
+
+    public RequestWithOptionalArgs post(String url){
+        __step_context.setRequest(new TRequest("POST",url));
+        return new RequestWithOptionalArgs(__step_context);
+    }
+
+
 
 
 

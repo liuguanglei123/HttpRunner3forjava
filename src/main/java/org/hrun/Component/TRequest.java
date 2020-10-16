@@ -18,8 +18,10 @@ public class TRequest {
     private boolean verify;
     private Object upload; //TODO：上传文件
 
-    public Params getParams(){
-        return this.params;
+    public TRequest(String method,String url){
+        this.method = MethodEnum.getMethodEnum(method);
+        this.url = url;
     }
+
 
 }
