@@ -1,10 +1,9 @@
 package org.hrun.Component.LazyContent;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hrun.Component.Common.Variables;
-import org.hrun.Component.Parseable;
+import org.hrun.Component.ParseableIntf;
 import org.hrun.Utils;
 import org.hrun.exceptions.HrunExceptionFactory;
 
@@ -17,7 +16,7 @@ import static org.hrun.Parse.*;
 
 @Data
 @Slf4j
-public class LazyString extends LazyContent<String> implements Serializable, Parseable {
+public class LazyString extends LazyContent<String> implements Serializable, ParseableIntf {
     public static Pattern integer_regex_compile = Pattern.compile("(\\d+)");
 
     public static Pattern double_regex_compile = Pattern.compile("(\\d+)\\.(\\d+)");

@@ -2,13 +2,14 @@ package org.hrun.Component;
 
 import lombok.Data;
 import org.hrun.Component.Common.Variables;
+import org.hrun.Component.LazyContent.LazyString;
 
 @Data
 public class TConfig {
 
-    private String name;
+    private LazyString name;
     private Boolean verify;
-    private String base_url;
+    private LazyString base_url;
     private Variables variables;
     /*ODO:
     private Parameters parameters;
@@ -16,10 +17,10 @@ public class TConfig {
     private Hooks teardown_hooks;
      */
     private Export export;
-    private String path;
+    private LazyString path;
     private int weight;
 
-    public TConfig(String name,String base_url,Boolean verify,Variables variables,Export export,String path,
+    public TConfig(LazyString name,LazyString base_url,Boolean verify,Variables variables,Export export,LazyString path,
                    int weight){
         this.name = name;
         this.base_url = base_url;

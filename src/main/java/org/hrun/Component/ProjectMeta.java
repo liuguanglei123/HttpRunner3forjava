@@ -6,6 +6,7 @@ import lombok.Data;
 public class ProjectMeta {
 
     private String RootDir;
+    private Object functions;
 
     public Boolean isEmpty(){
         //TODO:

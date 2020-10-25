@@ -48,8 +48,6 @@ public class HttpRunner {
         for(Step step : this.teststeps){
            this. __teststeps.add(step.perform());
         }
-//        for step in this.teststeps:
-//            self.__teststeps.append(step.perform())
     }
 
 
@@ -97,14 +95,13 @@ public class HttpRunner {
 //TODO：            logger.remove(log_handler)
             logger.info("TODO：generate testcase log: {self.__log_path}");
         }
-        return null;
     }
 
     public HttpRunner run_testcase(TestCase testcase){
-        this.__config = testcase.getConfig;
-        this.__teststeps = testcase.getTestSteps;
+        this.__config = testcase.getConfig();
+        this.__teststeps = testcase.getTeststeps();
         if(this.__project_meta == null || this.__project_meta.isEmpty())
-            this.__project_meta = load_project_meta(this.__config.getPath);
+            this.__project_meta = load_project_meta(this.__config.getPath());
 
         this.__parse_config(this.__config);
         this.__start_at = System.currentTimeMillis();
@@ -132,8 +129,8 @@ public class HttpRunner {
         return this;
     }
 
-    public void __parse_config(Config config) {
-        config.getVariables.update(this.__session_variables);
+    public void __parse_config(TConfig config) {
+        config.getVariables().update(this.__session_variables);
         config.setVariables(Parse.parse_variables_mapping(
                 config.getVariables(), this.__project_meta.getFunctions()
                 )
@@ -142,7 +139,7 @@ public class HttpRunner {
         config.setBase_url(Parse.parse_data(config.getBase_url(), config.getVariables(), this.__project_meta.getFunctions()));
 
         if (this.__project_meta == null || this.__project_meta.isEmpty()) {
-            this.set__project_meta(load_project_meta(this.__config.getPath()));
+            this.set__project_meta(load_project_meta(this.__config.getPath().getEvalString()));
         }
     }
 

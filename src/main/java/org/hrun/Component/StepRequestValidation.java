@@ -1,6 +1,6 @@
 package org.hrun.Component;
 
-public class StepRequestValidation implements Performable {
+public class StepRequestValidation implements PerformableIntf {
     private TStep __step_context;
 
     public StepRequestValidation(TStep step_context){

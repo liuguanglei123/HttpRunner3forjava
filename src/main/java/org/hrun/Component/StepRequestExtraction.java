@@ -3,7 +3,7 @@ package org.hrun.Component;
 import lombok.Data;
 
 @Data
-public class StepRequestExtraction implements Performable {
+public class StepRequestExtraction implements PerformableIntf {
 
     private TStep __step_context;
 

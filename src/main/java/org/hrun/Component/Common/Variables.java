@@ -3,15 +3,12 @@ package org.hrun.Component.Common;
 import lombok.Data;
 import org.hrun.Component.LazyContent.LazyContent;
 import org.hrun.Component.LazyContent.LazyString;
-import org.hrun.Component.Parseable;
+import org.hrun.Component.ParseableIntf;
 import org.hrun.Component.VariablesMapping;
 import org.hrun.Utils;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class Variables implements Serializable {
@@ -58,7 +55,7 @@ public class Variables implements Serializable {
         }
     }
 
-    public Parseable to_value(Variables variables_mapping) {
+    public ParseableIntf to_value(Variables variables_mapping) {
         //TODO:
         return null;
     }
@@ -138,5 +135,15 @@ public class Variables implements Serializable {
         //TODO：
         return this;
     }
+
+    public Set<String> getKeys(){
+        return this.content.keySet();
+    }
+
+    public LazyContent get(String key){
+        return this.content.get(key);
+    }
+
+
 
 }

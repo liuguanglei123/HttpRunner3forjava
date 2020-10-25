@@ -3,7 +3,7 @@ package org.hrun.Component.Common;
 import lombok.Data;
 import org.hrun.Component.LazyContent.LazyContent;
 import org.hrun.Component.LazyContent.LazyString;
-import org.hrun.Component.Parseable;
+import org.hrun.Component.ParseableIntf;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Data
-public class Params implements Serializable, Parseable {
+public class Params implements Serializable, ParseableIntf {
     private HashMap<String, LazyContent> content = new HashMap<String,LazyContent>();
 
     public Params(Map raw_params) {
@@ -33,7 +33,7 @@ public class Params implements Serializable, Parseable {
         }
     }
 
-    public Parseable to_value(Variables variables_mapping) {
+    public ParseableIntf to_value(Variables variables_mapping) {
         if(this.content == null || this.content.size() == 0)
             return this;
 

@@ -18,6 +18,24 @@ public class Loader {
 
     public static ProjectMeta project_meta;
 
+
+    /*load testcases, .env, debugtalk.py functions.
+        testcases folder is relative to project_root_directory
+        by default, project_meta will be loaded only once, unless set reload to true.
+
+    Args:
+        test_path (str): test file/folder path, locate project RootDir from this path.
+        reload: reload project meta if set true, default to false
+
+    Returns:
+        project loaded api/testcases definitions,
+            environments and debugtalk.py functions.
+
+    */
+    public static ProjectMeta load_project_meta (String test_path){
+        return load_project_meta(test_path,false);
+    }
+
     public static ProjectMeta load_project_meta (String test_path, boolean reload){
         if(project_meta == null && !reload)
             return project_meta;

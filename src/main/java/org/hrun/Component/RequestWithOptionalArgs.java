@@ -2,7 +2,7 @@ package org.hrun.Component;
 
 import org.hrun.Component.Common.*;
 
-public class RequestWithOptionalArgs implements Performable {
+public class RequestWithOptionalArgs implements PerformableIntf {
     private TStep __step_context;
 
     public RequestWithOptionalArgs(TStep step_context){

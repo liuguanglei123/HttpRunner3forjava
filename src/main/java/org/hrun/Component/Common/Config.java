@@ -1,6 +1,7 @@
 package org.hrun.Component.Common;
 
 import org.hrun.Component.Export;
+import org.hrun.Component.LazyContent.LazyString;
 import org.hrun.Component.TConfig;
 
 import java.util.List;
@@ -8,18 +9,18 @@ import java.util.Map;
 
 public class Config {
 
-    private String __name;
+    private LazyString __name;
     private Variables __variables;
-    private String __base_url;
+    private LazyString __base_url;
     private Boolean __verify;
     private Export __export;
-    private String __path;
+    private LazyString __path;
     private int __weight;
 
     public Config(String name) {
-        this.__name = name;
+        this.__name = new LazyString(name);
         this.__variables = new Variables();
-        this.__base_url = "";
+        this.__base_url = new LazyString("");
         this.__verify = false;
         this.__export = new Export();
         this.__weight = 1;
@@ -35,7 +36,7 @@ public class Config {
     }
 
     public Config base_url(String base_url){
-        this.__base_url = base_url;
+        this.__base_url = new LazyString(base_url);
         return this;
     }
 

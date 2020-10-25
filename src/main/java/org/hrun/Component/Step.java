@@ -1,9 +1,9 @@
 package org.hrun.Component;
 
-public class Step implements Performable {
+public class Step implements PerformableIntf {
     private TStep __step_context;
 
-    public Step(Performable step_context){
+    public Step(PerformableIntf step_context){
         __step_context = step_context.perform();
     }
 

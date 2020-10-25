@@ -1,5 +1,5 @@
 package org.hrun.Component;
 
-public interface Performable {
+public interface PerformableIntf {
     TStep perform();
 }
