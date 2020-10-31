@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
-import com.hrun.component.ProjectMapping;
-import com.hrun.exceptions.HrunExceptionFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.hrun.Component.Common.Variables;
 import org.hrun.exceptions.HrunExceptionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -321,5 +320,11 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static Variables merge_variables(Variables variables, Variables variables_to_be_overridden){
+        Variables merged_variables = deepcopy_obj(variables_to_be_overridden);
+        merged_variables.update(variables);
+        return merged_variables;
     }
 }

@@ -3,9 +3,10 @@ package org.hrun.Component;
 import lombok.Data;
 import org.hrun.Component.Common.*;
 import org.hrun.Enum.MethodEnum;
+import org.hrun.Parse;
 
 @Data
-public class TRequest {
+public class TRequest implements Parseable {
     private MethodEnum method;
     private String url;
     private Params params;
@@ -23,5 +24,13 @@ public class TRequest {
         this.url = url;
     }
 
+    public TRequest(){
 
+    }
+
+
+    @Override
+    public Parseable parse(Variables variables_mapping, FunctionsMapping functions_mapping) {
+        return new TRequest();
+    }
 }

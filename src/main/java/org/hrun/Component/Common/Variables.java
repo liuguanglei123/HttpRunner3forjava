@@ -4,8 +4,10 @@ import lombok.Data;
 import org.hrun.Component.LazyContent.LazyContent;
 import org.hrun.Component.LazyContent.LazyString;
 import org.hrun.Component.ParseableIntf;
+import org.hrun.Component.TRequest;
 import org.hrun.Component.VariablesMapping;
 import org.hrun.Utils;
+import org.omg.CORBA.TRANSACTION_MODE;
 
 import java.io.Serializable;
 import java.util.*;
@@ -13,6 +15,9 @@ import java.util.*;
 @Data
 public class Variables implements Serializable {
     public HashMap<String, LazyContent> content = new HashMap<String,LazyContent>();
+
+    //TOOD: 这里单独存放了request 和 resp ，后面看看能否优化一下
+    public TRequest request;
 
     //默认构造函数，用来构造一个空的variables对象
     public Variables(){
@@ -128,6 +133,11 @@ public class Variables implements Serializable {
 
     public Variables update(Map param){
         extend(param);
+        return this;
+    }
+
+    public Variables update(String key,TRequest value){
+        this.request = value;
         return this;
     }
 

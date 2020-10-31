@@ -32,7 +32,7 @@ public class HttpRunner {
     private List<String> __export;
     private List<StepData> __step_datas = new ArrayList<>();
     private HttpSession __session;
-    private VariablesMapping __session_variables;
+    private Variables __session_variables;
     // time
     private long __start_at;
     private long __end_at;
@@ -109,13 +109,13 @@ public class HttpRunner {
         if(this.__session == null){
             this.__session = new HttpSession();
         }
-        VariablesMapping extracted_variables = new VariablesMapping();
+        Variables extracted_variables = new Variables();
 
         for(TStep step : this.__teststeps){
-            step.setVariables(merge_variables(step.getVariables, extracted_variables));
-            step.setVariables(merge_variables(step.getVariables, this.__config.getVariables()));
+            step.setVariables(Utils.merge_variables(step.getVariables(), extracted_variables));
+            step.setVariables(Utils.merge_variables(step.getVariables(), this.__config.getVariables()));
 
-            step.getVariables = parse_variables_mapping(step.getVariables, this.__project_meta,getFunctions());
+            step.setVariables(Parse.parse_variables_mapping(step.getVariables(), this.__project_meta.getFunctions()));
 
             //TODO: USE_ALLURE:
             Map extract_mapping = this.__run_step(step);
@@ -139,7 +139,7 @@ public class HttpRunner {
         config.setBase_url(Parse.parse_data(config.getBase_url(), config.getVariables(), this.__project_meta.getFunctions()));
 
         if (this.__project_meta == null || this.__project_meta.isEmpty()) {
-            this.set__project_meta(load_project_meta(this.__config.getPath().getEvalString()));
+            this.set__project_meta(load_project_meta(this.__config.getPath()));
         }
     }
 
@@ -149,7 +149,8 @@ public class HttpRunner {
 
         if(step.getRequest() != null){
             step_data = this.__run_step_request(step);
-        }else if(step.getTestcase != null){
+        }else if(step.getTestcase() != null){
+            //TODO:case的嵌套
             step_data = this.__run_step_testcase(step);
         }else{
             HrunExceptionFactory.create("E0001");
@@ -162,19 +163,21 @@ public class HttpRunner {
 
     public StepData __run_step_request(TStep step){
         StepData step_data = new StepData(step.getName());
-        prepare_upload_step(step,this.__project_meta.getFuntions());
-        request_dict = step.getRequest().getDict();
-        request_dict.remove("upload");
-        parsed_request_dict = parse_data(request_dict,step.getVariables(),this.__project_meta.getFunctions());
+        //TODO: deal upload request
+//        prepare_upload_step(step,this.__project_meta.getFuntions());
+//        request_dict.remove("upload");
 
-        parsed_request_dict["headers"].setdefault(
-                "HRUN-Request-ID",
-                "HRUN-{self.__case_id}-{str(int(time.time() * 1000))[-6:]}"
-                );
-        step.getVariables().put("request", parsed_request_dict);
-        if(step.hasSetup_hooks()){
-            this.__call_hooks(step.getSetup_hooks(), step.getVariables(), "setup request");
-        }
+        TRequest parsed_request_dict = new TRequest();
+        parsed_request_dict = (TRequest) Parse.parse_data(step.getRequest(),step.getVariables(),this.__project_meta.getFunctions());
+
+        parsed_request_dict.getHeaders().setdefault("HRUN-Request-ID",
+                "HRUN-{self.__case_id}-{str(int(time.time() * 1000))[-6:]}");
+        step.getVariables().update("request",parsed_request_dict);
+
+        //TODO:
+//        if(step.hasSetup_hooks()){
+//            this.__call_hooks(step.getSetup_hooks(), step.getVariables(), "setup request");
+//        }
         // prepare arguments
         method = parsed_request_dict.pop("method")
         url_path = parsed_request_dict.pop("url")

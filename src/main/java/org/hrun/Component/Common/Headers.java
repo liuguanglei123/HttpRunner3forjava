@@ -62,4 +62,8 @@ public class Headers implements Serializable {
     public void update(Headers headers){
         //TODO:
     }
+
+    public void setdefault(String key,String value){
+        this.content.put(key,new LazyString(value));
+    }
 }

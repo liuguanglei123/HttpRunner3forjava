@@ -1,6 +1,7 @@
 package org.hrun;
 
 import com.google.common.base.Strings;
+import org.hrun.Component.LazyContent.LazyString;
 import org.hrun.Component.ProjectMeta;
 import org.hrun.exceptions.HrunExceptionFactory;
 import org.slf4j.Logger;
@@ -32,8 +33,8 @@ public class Loader {
             environments and debugtalk.py functions.
 
     */
-    public static ProjectMeta load_project_meta (String test_path){
-        return load_project_meta(test_path,false);
+    public static ProjectMeta load_project_meta (LazyString test_path){
+        return load_project_meta(test_path.getEvalString(),false);
     }
 
     public static ProjectMeta load_project_meta (String test_path, boolean reload){

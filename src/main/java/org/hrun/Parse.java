@@ -4,6 +4,8 @@ import org.hrun.Component.Common.Variables;
 import org.hrun.Component.FunctionsMapping;
 import org.hrun.Component.LazyContent.LazyContent;
 import org.hrun.Component.LazyContent.LazyString;
+import org.hrun.Component.Parseable;
+import org.hrun.Component.TRequest;
 import org.hrun.Component.VariablesMapping;
 import org.hrun.exceptions.HrunExceptionFactory;
 
@@ -26,7 +28,7 @@ public class Parse {
     static public Pattern function_regex_compile = Pattern.compile("\\$\\{(\\w+)\\(([\\$\\w\\.\\-/\\s=,]*)\\)\\}");
 
 
-    public static VariablesMapping parse_variables_mapping(Variables variables_mapping){
+    public static Variables parse_variables_mapping(Variables variables_mapping){
         return parse_variables_mapping(variables_mapping,null);
 
     }
@@ -127,4 +129,11 @@ public class Parse {
         //TODO: refactor type check hrun原版注释
         return content.to_value(variables_mapping);
     }
+
+    public static Parseable parse_data(Parseable raw_data, Variables variables_mapping, Object functions_mapping){
+        return raw_data.parse(variables_mapping,null);
+
+    }
+
+
 }
